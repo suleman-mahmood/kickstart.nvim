@@ -239,7 +239,7 @@ require('lazy').setup({
   --  This is equivalent to:
   --    require('Comment').setup({})
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',    opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -274,11 +274,11 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VeryLazy', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
-      local wk = require("which-key")
+      local wk = require 'which-key'
       wk.setup()
 
       wk.add {
@@ -289,7 +289,7 @@ require('lazy').setup({
         { '<leader>w', desc = '[W]orkspace' },
         { '<leader>t', desc = '[T]oggle' },
         { '<leader>h', desc = 'Git [H]unk' },
-        { '<leader>h', desc = 'Git [H]unk', mode = "v" },
+        { '<leader>h', desc = 'Git [H]unk', mode = 'v' },
       }
     end,
   },
@@ -323,7 +323,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -416,11 +416,11 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim',       opts = {} },
+      { 'folke/neodev.nvim', opts = {} },
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -631,7 +631,7 @@ require('lazy').setup({
       {
         '<leader>f',
         function()
-          require('conform').format { async = true, lsp_format = "fallback" }
+          require('conform').format { async = true, lsp_format = 'fallback' }
         end,
         mode = '',
         desc = '[F]ormat buffer',
@@ -651,7 +651,7 @@ require('lazy').setup({
       -- end,
       format_on_save = {
         timeout_ms = 500,
-        lsp_format = "fallback",
+        lsp_format = 'fallback',
       },
       formatters_by_ft = {
         lua = { 'stylua' },
@@ -661,7 +661,7 @@ require('lazy').setup({
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
         -- javascript = { { "prettierd", "prettier" } },
-        html = { "djlint" },
+        html = { 'djlint' },
       },
     },
   },
@@ -694,13 +694,19 @@ require('lazy').setup({
           },
         },
         config = function()
-          local ls = require("luasnip")
+          local ls = require 'luasnip'
 
-          vim.keymap.set({ "i" }, "<C-K>", function() ls.expand() end, { silent = true })
-          vim.keymap.set({ "i", "s" }, "<C-l>", function() ls.jump(1) end, { silent = true })
-          vim.keymap.set({ "i", "s" }, "<C-h>", function() ls.jump(-1) end, { silent = true })
+          vim.keymap.set({ 'i' }, '<C-K>', function()
+            ls.expand()
+          end, { silent = true })
+          vim.keymap.set({ 'i', 's' }, '<C-l>', function()
+            ls.jump(1)
+          end, { silent = true })
+          vim.keymap.set({ 'i', 's' }, '<C-h>', function()
+            ls.jump(-1)
+          end, { silent = true })
 
-          vim.keymap.set({ "i", "s" }, "<C-E>", function()
+          vim.keymap.set({ 'i', 's' }, '<C-E>', function()
             if ls.choice_active() then
               ls.change_choice(1)
             end
@@ -771,7 +777,6 @@ require('lazy').setup({
       }
     end,
   },
-
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -923,6 +928,6 @@ require('lspconfig').dartls.setup {
   },
 }
 
-vim.keymap.set("n", "<leader>ls", "<cmd> source ~/.config/nvim/lua/custom/snippets.lua<cr>")
+vim.keymap.set('n', '<leader>ls', '<cmd> source ~/.config/nvim/lua/custom/snippets.lua<cr>')
 
 require 'custom.snippets'
