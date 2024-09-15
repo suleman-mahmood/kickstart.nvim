@@ -654,13 +654,14 @@ require('lazy').setup({
         lsp_format = "fallback",
       },
       formatters_by_ft = {
-        -- lua = { 'stylua' },
+        lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
         -- javascript = { { "prettierd", "prettier" } },
+        html = { "djlint" },
       },
     },
   },
@@ -692,6 +693,19 @@ require('lazy').setup({
             end,
           },
         },
+        config = function()
+          local ls = require("luasnip")
+
+          vim.keymap.set({ "i" }, "<C-K>", function() ls.expand() end, { silent = true })
+          vim.keymap.set({ "i", "s" }, "<C-l>", function() ls.jump(1) end, { silent = true })
+          vim.keymap.set({ "i", "s" }, "<C-h>", function() ls.jump(-1) end, { silent = true })
+
+          vim.keymap.set({ "i", "s" }, "<C-E>", function()
+            if ls.choice_active() then
+              ls.change_choice(1)
+            end
+          end, { silent = true })
+        end,
       },
       'saadparwaiz1/cmp_luasnip',
 
@@ -700,6 +714,7 @@ require('lazy').setup({
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'hrsh7th/cmp-buffer',
     },
     config = function()
       -- See `:help cmp`
@@ -745,24 +760,6 @@ require('lazy').setup({
           --  completions whenever it has completion options available.
           ['<C-Space>'] = cmp.mapping.complete {},
 
-          -- Think of <c-l> as moving to the right of your snippet expansion.
-          --  So if you have a snippet that's like:
-          --  function $name($args)
-          --    $body
-          --  end
-          --
-          -- <c-l> will move you to the right of each of the expansion locations.
-          -- <c-h> is similar, except moving you backwards.
-          ['<C-l>'] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            end
-          end, { 'i', 's' }),
-          ['<C-h>'] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { 'i', 's' }),
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
@@ -925,3 +922,7 @@ require('lspconfig').dartls.setup {
     },
   },
 }
+
+vim.keymap.set("n", "<leader>ls", "<cmd> source ~/.config/nvim/lua/custom/snippets.lua<cr>")
+
+require 'custom.snippets'
